@@ -1,8 +1,8 @@
 import config as cfg
 import numpy as np
 import os
-from PIL import Image
 from sklearn.model_selection import train_test_split
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 def to_categorical(mask):
     mask_ = np.zeros((512, 512, 1), dtype=np.uint8)
@@ -16,14 +16,20 @@ def to_categorical(mask):
 
     return mask_
 
-def main():
-    image_names = os.listdir(cfg.IMAGES_DIR)
-    mask_names = os.listdir(cfg.MASKS_DIR)
+def load_images_from_directory(directory, target_size):
+    images = []
+    for filename in os.listdir(directory):
+        img_path = os.path.join(directory, filename)
+        img = load_img(img_path, target_size=target_size)  
+        img_array = img_to_array(img, dtype=np.uint8)
+        images.append(img_array)
+    return np.array(images)
 
-    images = np.array([np.asarray(Image.open(os.path.join(cfg.IMAGES_DIR, image))) 
-                    for image in image_names])
-    masks = np.array([np.asarray(Image.open(os.path.join(cfg.MASKS_DIR, mask)))
-                    for mask in mask_names])
+
+def main():
+
+    images = load_images_from_directory(cfg.IMAGES_DIR, (512,512))
+    masks = load_images_from_directory(cfg.MASKS_DIR, (512,512))
 
     images_ = np.array([image/255.0 for image in images])
     categorical_masks = np.array([to_categorical(mask) for mask in masks])
@@ -37,6 +43,7 @@ def main():
     print("Wymiar zbioru testowego:", (X_test.shape, Y_test.shape))
         
     np.save(f'{cfg.DATA_DIR}/splitted_data.npy', [X_train, Y_train, X_test, Y_test])
+
 
 if __name__ == '__main__':
     main()
