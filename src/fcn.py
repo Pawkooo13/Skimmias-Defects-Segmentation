@@ -24,7 +24,7 @@ class FCN:
         c6 = Conv2D(256, (3,3), activation='relu', kernel_initializer='he_normal', padding='same')(c6)
 
         u6 = Conv2DTranspose(128, (2,2), strides=(2,2), padding='same')(c6)
-        c6 = Conv2D(128, (3,3), activation='relu', kernel_initializer='he_normal', padding='same')(c6)
+        c6 = Conv2D(128, (3,3), activation='relu', kernel_initializer='he_normal', padding='same')(u6)
         c6 = Dropout(0.2)(c6)
         c6 = Conv2D(128, (3,3), activation='relu', kernel_initializer='he_normal', padding='same')(c6)
 

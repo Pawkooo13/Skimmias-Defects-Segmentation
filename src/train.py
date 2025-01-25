@@ -33,99 +33,43 @@ def main():
     data_path = os.path.join(DATA_DIR, 'splitted_data.npy')
     data_no_hard_mining_path = os.path.join(DATA_DIR, 'splitted_no_hard_mining_data.npy')
 
-    X_train, Y_train, X_test, Y_test = np.load(data_path, allow_pickle=True)
-    X_train_2, Y_train_2, X_test_2, Y_test_2, = np.load(data_no_hard_mining_path, allow_pickle=True)
+    X_train, Y_train = np.load(data_path, allow_pickle=True)[:2]
+    X_train_smp, Y_train_smp = np.load(data_no_hard_mining_path, allow_pickle=True)[:2]
+
+    models = {'UNet': 0, 'FCN': 0, 'UNet_smp': 0, 'FCN_smp': 0}
 
     print("Liczba dostępnych GPU: ", len(list_physical_devices('GPU')))
 
-    # uczenie modelu unet
-    
-    print("Inicjalizowanie modelu UNet! \n")
+    for model_name in models.keys():
+        if 'smp' in model_name:
+            X, Y = (X_train_smp, Y_train_smp)
+        else:
+            X, Y = (X_train, Y_train)
 
-    unet_model = UNet.build_model()
-
-    unet_model.compile(optimizer='adam',
-                       loss='sparse_categorical_crossentropy',
-                       metrics=['accuracy'])
-
-    print("Uczenie modelu UNet: \n")
-
-    unet_history = unet_model.fit(x=X_train,
-                                  y=Y_train, 
-                                  batch_size=4,
-                                  epochs=100)
-    
-    get_training_plot(history=unet_history, filename='unet_training')
-    unet_preds = make_predictions(model=unet_model, X_test=X_test)
-    unet_accuracy = get_accuracy(y_true=Y_test, y_pred=unet_preds)
-
-    #uczenie modelu fcn
-
-    print("Inicjalizowanie modelu FCN! \n")
-
-    fcn_model = FCN.build_model()
-
-    fcn_model.compile(optimizer='adam',
+        print(f'Inicjalizowanie modelu {model_name}! \n')
+        if 'FCN' in model_name:
+            model = FCN.build_model()
+        else:
+            model = UNet.build_model()
+        
+        model.compile(optimizer='adam',
                       loss='sparse_categorical_crossentropy',
                       metrics=['accuracy'])
+        
+        print("Uczenie modelu: \n")
 
-    print("Uczenie modelu FCN: \n")
+        history = model.fit(x=X,
+                            y=Y, 
+                            batch_size=4,
+                            epochs=30)
 
-    fcn_history = fcn_model.fit(x=X_train,
-                                y=Y_train,
-                                batch_size=4,
-                                epochs=100)
-    
-    get_training_plot(history=fcn_history, filename='fcn_training')
-    fcn_preds = make_predictions(model=fcn_model, X_test=X_test)
-    fcn_accuracy = get_accuracy(y_true=Y_test, y_pred=fcn_preds)
-    
-    # uczenie modelu unet na zbiorze danych bez zdj hard mining
+        get_training_plot(history=history, filename=model_name)
 
-    print("Inicjalizowanie modelu UNet! \n")
+        acc = history.history['accuracy'][-1]
+        models.update({model_name: acc})
 
-    unet_model_2 = UNet.build_model()
-
-    unet_model_2.compile(optimizer='adam',
-                         loss='sparse_categorical_crossentropy',
-                         metrics=['accuracy'])
-
-    print("Uczenie modelu UNet na zbiorze danych bez zdj hard mining: \n")
-
-    unet_2_history = unet_model_2.fit(x=X_train_2,
-                                      y=Y_train_2, 
-                                      batch_size=4,
-                                      epochs=100)
-    
-    get_training_plot(history=unet_2_history, filename='unet_2_training')
-    unet_2_preds = make_predictions(model=unet_model_2, X_test=X_test_2)
-    unet_2_accuracy = get_accuracy(y_true=Y_test_2, y_pred=unet_2_preds)
-
-    # uczenie modelu fcn na zbiorze dannych bez zdj hard mining
-
-    print("Inicjalizowanie modelu FCN! \n")
-
-    fcn_model_2 = FCN.build_model()
-
-    fcn_model_2.compile(optimizer='adam',
-                        loss='sparse_categorical_crossentropy',
-                        metrics=['accuracy'])
-
-    print("Uczenie modelu FCN: \n")
-
-    fcn_2_history = fcn_model_2.fit(x=X_train_2,
-                                    y=Y_train_2,
-                                    batch_size=4,
-                                    epochs=100)
-    
-    get_training_plot(history=fcn_2_history, filename='fcn_2_training')
-    fcn_2_preds = make_predictions(model=fcn_model_2, X_test=X_test_2)
-    fcn_2_accuracy = get_accuracy(y_true=Y_test_2, y_pred=fcn_2_preds)
-
-    accuracies = pd.DataFrame(data={'model': ['UNet', 'FCN', 'UNet_2', 'FCN_2'],
-                                    'acc': [unet_accuracy, fcn_accuracy, unet_2_accuracy, fcn_2_accuracy]})
-    
-    print(accuracies.sort_values(by='acc', ascending=False))
+    accuracies = pd.DataFrame.from_dict(models, orient='index', columns=['accuracy'])
+    print(accuracies.sort_values(by='accuracy', ascending=False))
 
 if __name__ == '__main__':
     main()

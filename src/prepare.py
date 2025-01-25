@@ -56,8 +56,8 @@ def main():
             images_no_hard_mining.append(images_[i])
             masks_no_hard_mining.append(categorical_masks[i])
 
-    X_train_simplified, X_test_simplified, Y_train_simplified, Y_test_simplified = train_test_split(images_no_hard_mining, 
-                                                                                                    masks_no_hard_mining, 
+    X_train_simplified, X_test_simplified, Y_train_simplified, Y_test_simplified = train_test_split(np.array(images_no_hard_mining), 
+                                                                                                    np.array(masks_no_hard_mining), 
                                                                                                     test_size=0.2, 
                                                                                                     random_state=713)
     
