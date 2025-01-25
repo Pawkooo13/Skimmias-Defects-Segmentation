@@ -2,6 +2,7 @@ import config as cfg
 import os
 import numpy as np
 from unet import UNet
+from fcn import FCN
 
 data_path = os.path.join(cfg.DATA_DIR, 'splitted_data.npy')
 
@@ -17,3 +18,14 @@ unet_history = unet_model.fit(x=X_train,
                               y=Y_train, 
                               batch_size=4,
                               epochs=100)
+
+fcn_model = FCN.build_model()
+
+fcn_model.compile(optimizer='adam',
+                  loss='sparse_categorical_crossentropy',
+                  metrics=['accuracy'])
+
+fcn_history = fcn_model.fit(x=X_train,
+                            y=Y_train,
+                            batch_size=4,
+                            epochs=100)
