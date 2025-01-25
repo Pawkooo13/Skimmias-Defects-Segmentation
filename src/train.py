@@ -4,6 +4,7 @@ import numpy as np
 from unet import UNet
 from fcn import FCN
 import pandas as pd
+from tensorflow.keras.metrics import Accuracy
 
 def make_predictions(model, X_test):
     preds = []
@@ -16,7 +17,7 @@ def make_predictions(model, X_test):
     return preds
 
 def get_accuracy(y_true, y_pred):
-    metric = tf.keras.metrics.Accuracy()
+    metric = Accuracy()
     metric.update_state(y_true, y_pred)
     return metric.result()
 
@@ -80,13 +81,13 @@ def main():
 
     print("Uczenie modelu UNet na zbiorze danych bez zdj hard mining: \n")
 
-    unet_2_history = unet_model_2.fit(x=X_train,
-                                      y=Y_train, 
+    unet_2_history = unet_model_2.fit(x=X_train_2,
+                                      y=Y_train_2, 
                                       batch_size=4,
                                       epochs=100)
     
-    unet_2_preds = make_predictions(model=unet_model_2, X_test=X_test)
-    unet_2_accuracy = get_accuracy(y_true=Y_test, y_pred=unet_2_preds)
+    unet_2_preds = make_predictions(model=unet_model_2, X_test=X_test_2)
+    unet_2_accuracy = get_accuracy(y_true=Y_test_2, y_pred=unet_2_preds)
 
     # uczenie modelu fcn na zbiorze dannych bez zdj hard mining
 
@@ -100,13 +101,13 @@ def main():
 
     print("Uczenie modelu FCN: \n")
 
-    fcn_2_history = fcn_model_2.fit(x=X_train,
-                                    y=Y_train,
+    fcn_2_history = fcn_model_2.fit(x=X_train_2,
+                                    y=Y_train_2,
                                     batch_size=4,
                                     epochs=100)
     
-    fcn_2_preds = make_predictions(model=fcn_model_2, X_test=X_test)
-    fcn_2_accuracy = get_accuracy(y_true=Y_test, y_pred=fcn_2_preds)
+    fcn_2_preds = make_predictions(model=fcn_model_2, X_test=X_test_2)
+    fcn_2_accuracy = get_accuracy(y_true=Y_test_2, y_pred=fcn_2_preds)
 
     accuracies = pd.DataFrame(data={'model': ['UNet', 'FCN', 'UNet_2', 'FCN_2'],
                                     'acc': [unet_accuracy, fcn_accuracy, unet_2_accuracy, fcn_2_accuracy]})
