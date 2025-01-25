@@ -1,10 +1,11 @@
-import config as cfg
+from configs import DATA_DIR, PLOTS_DIR
 import os
 import numpy as np
 from unet import UNet
 from fcn import FCN
 import pandas as pd
 from tensorflow.keras.metrics import Accuracy
+from tensorflow.config import list_physical_devices
 
 def make_predictions(model, X_test):
     preds = []
@@ -21,16 +22,24 @@ def get_accuracy(y_true, y_pred):
     metric.update_state(y_true, y_pred)
     return metric.result()
 
+def get_training_plot(history, filename):
+    ax = pd.DataFrame(history.history).plot()
+    fig = ax.get_figure()
+    path = os.path.join(PLOTS_DIR, f'{filename}.png')
+    fig.savefig(path)
+
 def main():
 
-    data_path = os.path.join(cfg.DATA_DIR, 'splitted_data.npy')
-    data_no_hard_mining_path = os.path.join(cfg.DATA_DIR, 'splitted_no_hard_mining_data.npy')
+    data_path = os.path.join(DATA_DIR, 'splitted_data.npy')
+    data_no_hard_mining_path = os.path.join(DATA_DIR, 'splitted_no_hard_mining_data.npy')
 
     X_train, Y_train, X_test, Y_test = np.load(data_path, allow_pickle=True)
     X_train_2, Y_train_2, X_test_2, Y_test_2, = np.load(data_no_hard_mining_path, allow_pickle=True)
 
-    # uczenie modelu unet
+    print("Liczba dostępnych GPU: ", len(list_physical_devices('GPU')))
 
+    # uczenie modelu unet
+    
     print("Inicjalizowanie modelu UNet! \n")
 
     unet_model = UNet.build_model()
@@ -46,6 +55,7 @@ def main():
                                   batch_size=4,
                                   epochs=100)
     
+    get_training_plot(history=unet_history, filename='unet_training')
     unet_preds = make_predictions(model=unet_model, X_test=X_test)
     unet_accuracy = get_accuracy(y_true=Y_test, y_pred=unet_preds)
 
@@ -66,6 +76,7 @@ def main():
                                 batch_size=4,
                                 epochs=100)
     
+    get_training_plot(history=fcn_history, filename='fcn_training')
     fcn_preds = make_predictions(model=fcn_model, X_test=X_test)
     fcn_accuracy = get_accuracy(y_true=Y_test, y_pred=fcn_preds)
     
@@ -86,6 +97,7 @@ def main():
                                       batch_size=4,
                                       epochs=100)
     
+    get_training_plot(history=unet_2_history, filename='unet_2_training')
     unet_2_preds = make_predictions(model=unet_model_2, X_test=X_test_2)
     unet_2_accuracy = get_accuracy(y_true=Y_test_2, y_pred=unet_2_preds)
 
@@ -106,6 +118,7 @@ def main():
                                     batch_size=4,
                                     epochs=100)
     
+    get_training_plot(history=fcn_2_history, filename='fcn_2_training')
     fcn_2_preds = make_predictions(model=fcn_model_2, X_test=X_test_2)
     fcn_2_accuracy = get_accuracy(y_true=Y_test_2, y_pred=fcn_2_preds)
 
