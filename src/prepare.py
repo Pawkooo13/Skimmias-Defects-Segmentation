@@ -64,6 +64,8 @@ def main():
     print("Wymiar zbioru treningowego bez zdjec hard-mining:", (X_train_simplified.shape, Y_train_simplified.shape))
     print("Wymiar zbioru testowego bez zdjec hard-mining:", (X_test_simplified.shape, Y_test_simplified.shape))
 
+    np.save(f'{cfg.DATA_DIR}/splitted_no_hard_mining_data.npy', [X_train_simplified, Y_train_simplified, 
+                                                                 X_test_simplified, Y_test_simplified])
 
 if __name__ == '__main__':
     main()
