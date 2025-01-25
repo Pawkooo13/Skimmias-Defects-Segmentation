@@ -1,4 +1,4 @@
-import config as cfg
+import configs as cfg
 import numpy as np
 import os
 from sklearn.model_selection import train_test_split
