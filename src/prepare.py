@@ -44,6 +44,26 @@ def main():
         
     np.save(f'{cfg.DATA_DIR}/splitted_data.npy', [X_train, Y_train, X_test, Y_test])
 
+    ##################################################################################
+
+    images_no_hard_mining = []
+    masks_no_hard_mining = []
+
+    for i in range(len(categorical_masks)):
+        if (masks[i] == np.zeros(shape=(512,512,3))).all():
+            continue
+        else:
+            images_no_hard_mining.append(images_[i])
+            masks_no_hard_mining.append(categorical_masks[i])
+
+    X_train_simplified, X_test_simplified, Y_train_simplified, Y_test_simplified = train_test_split(images_no_hard_mining, 
+                                                                                                    masks_no_hard_mining, 
+                                                                                                    test_size=0.2, 
+                                                                                                    random_state=713)
+    
+    print("Wymiar zbioru treningowego bez zdjec hard-mining:", (X_train_simplified.shape, Y_train_simplified.shape))
+    print("Wymiar zbioru testowego bez zdjec hard-mining:", (X_test_simplified.shape, Y_test_simplified.shape))
+
 
 if __name__ == '__main__':
     main()
