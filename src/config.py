@@ -1,6 +1,6 @@
 import os
 
-DATA_DIR = 'data/' #os.path.join(os.getcwd(), 'data') #'data/'
+DATA_DIR = 'data/' 
 
-IMAGES_DIR = 'data/images' #os.path.join(DATA_DIR, 'images') #'data/images'
-MASKS_DIR = 'data/masks' #os.path.join(DATA_DIR, 'masks') #'data/masks'
+IMAGES_DIR = 'data/images' 
+MASKS_DIR = 'data/masks' 
