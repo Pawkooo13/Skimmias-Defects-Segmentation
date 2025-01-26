@@ -18,7 +18,7 @@ def make_predictions(model, data):
 def get_accuracy(y_true, y_pred):
     metric = Accuracy()
     metric.update_state(y_true, y_pred)
-    return metric.result()
+    return metric.result().numpy()
 
 def main():
     data_path = os.path.join(DATA_DIR, 'splitted_data.npy')
