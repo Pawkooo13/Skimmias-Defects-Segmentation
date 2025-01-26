@@ -1,0 +1,42 @@
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+      - data/images
+      - data/masks
+      - src/configs.py
+      - src/prepare.py
+    outs:
+      - data/splitted_data.npy
+      - data/splitted_no_hard_mining_data.npy
+  train:
+    cmd: python src/train.py
+    deps:
+      - data/splitted_data.npy
+      - data/splitted_no_hard_mining_data.npy
+      - src/configs.py
+      - src/train.py
+    outs:
+      - models/UNet.keras
+      - models/FCN.keras
+      - models/UNet_smp.keras
+      - models/FCN_smp.keras
+      - plots/UNet.png
+      - plots/FCN.png
+      - plots/UNet_smp.png
+      - plots/FCN_smp.png
+      - results/training_accuracies.csv
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+      - src/configs.py
+      - data/splitted_data.npy
+      - data/splitted_no_hard_mining_data.npy
+      - models/UNet.keras
+      - models/FCN.keras
+      - models/UNet_smp.keras
+      - models/FCN_smp.keras
+      - src/prepare.py
+      - src/evaluate.py
+    outs:
+      - results/test_accuracies.csv
