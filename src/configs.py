@@ -6,3 +6,5 @@ IMAGES_DIR = 'data/images'
 MASKS_DIR = 'data/masks' 
 
 PLOTS_DIR = 'plots/'
+
+MODELS_DI = 'models/'
