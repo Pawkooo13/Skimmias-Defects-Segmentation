@@ -24,8 +24,8 @@ def main():
     data_path = os.path.join(DATA_DIR, 'splitted_data.npy')
     data_no_hard_mining_path = os.path.join(DATA_DIR, 'splitted_no_hard_mining_data.npy') 
     
-    X_test, Y_test = np.load(data_path, allow_pickle=True)[3:]
-    X_test_smp, Y_test_smp = np.load(data_no_hard_mining_path, allow_pickle=True)[3:]
+    X_test, Y_test = np.load(data_path, allow_pickle=True)[2:]
+    X_test_smp, Y_test_smp = np.load(data_no_hard_mining_path, allow_pickle=True)[2:]
 
     models = os.listdir(MODELS_DIR)
 
