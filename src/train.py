@@ -45,7 +45,7 @@ def main():
         history = model.fit(x=X,
                             y=Y, 
                             batch_size=4,
-                            epochs=30)
+                            epochs=10)
 
         model_save_path = os.path.join(MODELS_DIR, f'{model_name}.keras')
         model.save(model_save_path)
