@@ -6,6 +6,12 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.metrics import Accuracy
 
 def make_predictions(model, data):
+    """
+        model - model, który będzie dokonywał predykcji
+        data - dane, dla których model ma zwrócić predykcję 
+
+        Funkcja zwraca predykcje w postaci maski przez podany model na wskazanym zbiorze danych
+    """
     preds = []
 
     for img in data:
@@ -16,6 +22,12 @@ def make_predictions(model, data):
     return preds
 
 def get_accuracy(y_true, y_pred):
+    """
+        y_true - zbiór wartości prawdziwych
+        y_pred - zbiór wartości przewidywanych
+
+        Funkcja zwraca dokładność pomiędzy zbiorem y_true a y_pred
+    """
     metric = Accuracy()
     metric.update_state(y_true, y_pred)
     return metric.result().numpy()
