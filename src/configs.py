@@ -7,4 +7,6 @@ MASKS_DIR = 'data/masks'
 
 PLOTS_DIR = 'plots/'
 
-MODELS_DI = 'models/'
+MODELS_DIR = 'models/'
+
+RESULTS_DIR = 'results/'
