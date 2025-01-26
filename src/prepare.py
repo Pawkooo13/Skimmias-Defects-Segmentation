@@ -5,6 +5,12 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 def to_categorical(mask):
+    """
+        mask - maska w formacie rgb
+
+        Funkcja zwraca maske w formie kategorycznej (w,h,3) -> (w,h,1)
+        np. [[0,0,0], ... , [0,0,0]] -> [[0], ... , [0]]
+    """
     mask_ = np.zeros((512, 512, 1), dtype=np.uint8)
     
     black = (mask == [0, 0, 0]).all(axis=-1)
@@ -17,6 +23,12 @@ def to_categorical(mask):
     return mask_
 
 def load_images_from_directory(directory, target_size):
+    """
+        directory - folder, z którego wczytujemy dane
+        target_size - wymiar wczytywanych zdjęć 
+
+        Funkcja wczytuje wszystkie zdjęcia z podanego folderu i zwraca je w postaci listy
+    """
     images = []
     for filename in os.listdir(directory):
         img_path = os.path.join(directory, filename)

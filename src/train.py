@@ -7,6 +7,12 @@ import pandas as pd
 from tensorflow.config import list_physical_devices
 
 def get_training_plot(history, filename):
+    """
+        history - historia uczenia modelu (epoka - dokladnosc)
+        filename - nazwa pliku do zapisu
+
+        Funkcja zapisuje wykres trenowania modelu
+    """
     ax = pd.DataFrame(history.history).plot()
     fig = ax.get_figure()
     path = os.path.join(PLOTS_DIR, f'{filename}.png')
