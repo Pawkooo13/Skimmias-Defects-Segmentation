@@ -1,26 +1,10 @@
-from configs import DATA_DIR, PLOTS_DIR, MODELS_DIR
+from configs import DATA_DIR, PLOTS_DIR, MODELS_DIR, RESULTS_DIR
 import os
 import numpy as np
 from unet import UNet
 from fcn import FCN
 import pandas as pd
-from tensorflow.keras.metrics import Accuracy
 from tensorflow.config import list_physical_devices
-
-def make_predictions(model, X_test):
-    preds = []
-
-    for img in X_test:
-        pred = model.predict(img.reshape(1,512,512,3))
-        class_mask = np.argmax(pred, axis=-1)
-        preds.append(class_mask.reshape(512,512,1))
-
-    return preds
-
-def get_accuracy(y_true, y_pred):
-    metric = Accuracy()
-    metric.update_state(y_true, y_pred)
-    return metric.result()
 
 def get_training_plot(history, filename):
     ax = pd.DataFrame(history.history).plot()
@@ -71,8 +55,11 @@ def main():
         acc = history.history['accuracy'][-1]
         models.update({model_name: acc})
 
-    accuracies = pd.DataFrame.from_dict(models, orient='index', columns=['accuracy'])
-    print(accuracies.sort_values(by='accuracy', ascending=False))
+    results = pd.DataFrame.from_dict(models, orient='index', columns=['accuracy'])
+    print(results.sort_values(by='accuracy', ascending=False))
+
+    results_save_path = os.path.join(RESULTS_DIR, 'training_accuracies.csv')
+    results.to_csv(results_save_path)
 
 if __name__ == '__main__':
     main()
