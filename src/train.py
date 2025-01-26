@@ -51,7 +51,7 @@ def main():
         history = model.fit(x=X,
                             y=Y, 
                             batch_size=4,
-                            epochs=10)
+                            epochs=100)
 
         model_save_path = os.path.join(MODELS_DIR, f'{model_name}.keras')
         model.save(model_save_path)
@@ -62,6 +62,7 @@ def main():
         models.update({model_name: acc})
 
     results = pd.DataFrame.from_dict(models, orient='index', columns=['accuracy'])
+    print('Dokładność modeli w trakcie uczenia:')
     print(results.sort_values(by='accuracy', ascending=False))
 
     results_save_path = os.path.join(RESULTS_DIR, 'training_accuracies.csv')

@@ -58,6 +58,7 @@ def main():
         models_accuracy.update({model_file[:-6]: acc})
 
     results = pd.DataFrame.from_dict(models_accuracy, orient='index', columns=['accuracy'])
+    print('Dokładność modeli na zbiorze testowym:')
     print(results.sort_values(by='accuracy', ascending=False))
 
     results_save_path = os.path.join(RESULTS_DIR, 'test_accuracies.csv')
