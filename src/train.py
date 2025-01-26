@@ -1,4 +1,4 @@
-from configs import DATA_DIR, PLOTS_DIR
+from configs import DATA_DIR, PLOTS_DIR, MODELS_DIR
 import os
 import numpy as np
 from unet import UNet
@@ -62,6 +62,9 @@ def main():
                             y=Y, 
                             batch_size=4,
                             epochs=30)
+
+        model_save_path = os.path.join(MODELS_DIR, f'{model_name}.keras')
+        model.save(model_save_path)
 
         get_training_plot(history=history, filename=model_name)
 
