@@ -5,6 +5,7 @@ from unet import UNet
 from fcn import FCN
 import pandas as pd
 from tensorflow.config import list_physical_devices
+from dvc.api import params_show
 
 def get_training_plot(history, filename):
     """
@@ -28,6 +29,10 @@ def main():
 
     models = {'UNet': 0, 'FCN': 0, 'UNet_smp': 0, 'FCN_smp': 0}
 
+    params = params_show()
+    epochs = params['train']['epochs']
+    batch_size = params['train']['batch_size']
+
     print("Liczba dostępnych GPU: ", len(list_physical_devices('GPU')))
 
     for model_name in models.keys():
@@ -50,8 +55,8 @@ def main():
 
         history = model.fit(x=X,
                             y=Y, 
-                            batch_size=4,
-                            epochs=100)
+                            batch_size=batch_size,
+                            epochs=epochs)
 
         model_save_path = os.path.join(MODELS_DIR, f'{model_name}.keras')
         model.save(model_save_path)

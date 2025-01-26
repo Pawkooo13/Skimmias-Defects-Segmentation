@@ -3,6 +3,7 @@ import numpy as np
 import os
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
+from dvc.api import params_show
 
 def to_categorical(mask):
     """
@@ -46,9 +47,12 @@ def main():
     images_ = np.array([image/255.0 for image in images])
     categorical_masks = np.array([to_categorical(mask) for mask in masks])
 
+    params = params_show()
+    test_size = params['split_data']['test_size']
+
     X_train, X_test, Y_train, Y_test = train_test_split(images_, 
                                                         categorical_masks, 
-                                                        test_size=0.2, 
+                                                        test_size=test_size, 
                                                         random_state=713)
 
     print("Wymiar zbioru treningowego:", (X_train.shape, Y_train.shape))
@@ -70,7 +74,7 @@ def main():
 
     X_train_simplified, X_test_simplified, Y_train_simplified, Y_test_simplified = train_test_split(np.array(images_no_hard_mining), 
                                                                                                     np.array(masks_no_hard_mining), 
-                                                                                                    test_size=0.2, 
+                                                                                                    test_size=test_size, 
                                                                                                     random_state=713)
     
     print("Wymiar zbioru treningowego bez zdjec hard-mining:", (X_train_simplified.shape, Y_train_simplified.shape))
