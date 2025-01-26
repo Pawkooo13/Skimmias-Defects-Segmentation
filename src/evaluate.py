@@ -1,4 +1,4 @@
-from configs import DATA_DIR, MODELS_DIR
+from configs import DATA_DIR, MODELS_DIR, RESULTS_DIR
 import os
 import numpy as np
 import pandas as pd
@@ -45,8 +45,11 @@ def main():
 
         models_accuracy.update({model_file[:-6]: acc})
 
-    accuracies = pd.DataFrame.from_dict(models_accuracy, orient='index', columns=['accuracy'])
-    print(accuracies.sort_values(by='accuracy', ascending=False))
+    results = pd.DataFrame.from_dict(models_accuracy, orient='index', columns=['accuracy'])
+    print(results.sort_values(by='accuracy', ascending=False))
+
+    results_save_path = os.path.join(RESULTS_DIR, 'test_accuracies.csv')
+    results.to_csv(results_save_path)
 
 if __name__ == '__main__':
     main()
