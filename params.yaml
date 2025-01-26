@@ -1,0 +1,6 @@
+split_data:
+  test_size: 0.2
+
+train:
+  epochs: 100
+  batch_size: 4
