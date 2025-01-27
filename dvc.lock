@@ -1,0 +1,132 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+    - path: data/images
+      hash: md5
+      md5: dfd3a1be6d65e4b4cde562f89b9b799b.dir
+      size: 18076959
+      nfiles: 366
+    - path: data/masks
+      hash: md5
+      md5: 0d0bb218b05f15863851c18d7d1c1e64.dir
+      size: 1222466
+      nfiles: 366
+    - path: src/configs.py
+      hash: md5
+      md5: 73d6735e94aa0401c68b369f2f617a6d
+      size: 155
+    - path: src/prepare.py
+      hash: md5
+      md5: 3a11275fd3f1450d6d019d3fb4a0a483
+      size: 3626
+    outs:
+    - path: data/splitted_data.npy
+      hash: md5
+      md5: a2074881ee74fa0dfdaef5b9b477eb5b
+      size: 2398618170
+    - path: data/splitted_no_hard_mining_data.npy
+      hash: md5
+      md5: d2a84f4b3666bcb7ab0e5445568b7080
+      size: 1867776568
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/splitted_data.npy
+      hash: md5
+      md5: a2074881ee74fa0dfdaef5b9b477eb5b
+      size: 2398618170
+    - path: data/splitted_no_hard_mining_data.npy
+      hash: md5
+      md5: d2a84f4b3666bcb7ab0e5445568b7080
+      size: 1867776568
+    - path: src/configs.py
+      hash: md5
+      md5: 73d6735e94aa0401c68b369f2f617a6d
+      size: 155
+    - path: src/train.py
+      hash: md5
+      md5: 8222c00015916c985a27fba11dcda496
+      size: 2579
+    outs:
+    - path: models/FCN.keras
+      hash: md5
+      md5: b6db0879a3c283274162b3f3c4e6aa0e
+      size: 24180888
+    - path: models/FCN_smp.keras
+      hash: md5
+      md5: ec015ed11ce9061af0c6a8848f7fc3ae
+      size: 24180968
+    - path: models/UNet.keras
+      hash: md5
+      md5: 7162dfc2d65f56eee6ee2eb0e7de58cc
+      size: 30926600
+    - path: models/UNet_smp.keras
+      hash: md5
+      md5: c2fb6314bf6e0b71f5ee1901267ed69b
+      size: 30927096
+    - path: plots/FCN.png
+      hash: md5
+      md5: 3583a9d0f7e8ae327282de41c816c4a3
+      size: 19989
+    - path: plots/FCN_smp.png
+      hash: md5
+      md5: 6de411d1263179cae86f140f99ca1bf5
+      size: 18853
+    - path: plots/UNet.png
+      hash: md5
+      md5: 9fcf68f03f077d15e1cd7628158deec1
+      size: 19039
+    - path: plots/UNet_smp.png
+      hash: md5
+      md5: 4ba8777bf8c104a3f85d92f9a075d6c7
+      size: 11452
+    - path: results/training_accuracies.csv
+      hash: md5
+      md5: 1da7a271cb889f780246f3b98c7adee9
+      size: 117
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: data/splitted_data.npy
+      hash: md5
+      md5: a2074881ee74fa0dfdaef5b9b477eb5b
+      size: 2398618170
+    - path: data/splitted_no_hard_mining_data.npy
+      hash: md5
+      md5: d2a84f4b3666bcb7ab0e5445568b7080
+      size: 1867776568
+    - path: models/FCN.keras
+      hash: md5
+      md5: b6db0879a3c283274162b3f3c4e6aa0e
+      size: 24180888
+    - path: models/FCN_smp.keras
+      hash: md5
+      md5: ec015ed11ce9061af0c6a8848f7fc3ae
+      size: 24180968
+    - path: models/UNet.keras
+      hash: md5
+      md5: 7162dfc2d65f56eee6ee2eb0e7de58cc
+      size: 30926600
+    - path: models/UNet_smp.keras
+      hash: md5
+      md5: c2fb6314bf6e0b71f5ee1901267ed69b
+      size: 30927096
+    - path: src/configs.py
+      hash: md5
+      md5: 73d6735e94aa0401c68b369f2f617a6d
+      size: 155
+    - path: src/evaluate.py
+      hash: md5
+      md5: eda3d04b801cc4108e290530ee209664
+      size: 2253
+    - path: src/prepare.py
+      hash: md5
+      md5: 3a11275fd3f1450d6d019d3fb4a0a483
+      size: 3626
+    outs:
+    - path: results/test_accuracies.csv
+      hash: md5
+      md5: 367a8f93878df4cf306e92a17675f93b
+      size: 83

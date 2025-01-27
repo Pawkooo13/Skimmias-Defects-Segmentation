@@ -44,7 +44,7 @@ def main():
     models_accuracy = {}
     for model_file in models:
 
-        model_path = os.path.join(MODELS_DIR, model_file)
+        model_path = MODELS_DIR + model_file
         print(model_path)
         model = load_model(model_path)
 
