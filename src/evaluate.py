@@ -15,7 +15,7 @@ def make_predictions(model, data):
     preds = []
 
     for img in data:
-        pred = model.predict(img.reshape(1,512,512,3))
+        pred = model.predict(img.reshape(1,512,512,3), verbose=0)
         class_mask = np.argmax(pred, axis=-1)
         preds.append(class_mask.reshape(512,512,1))
 
@@ -45,6 +45,7 @@ def main():
     for model_file in models:
 
         model_path = os.path.join(MODELS_DIR, model_file)
+        print(model_path)
         model = load_model(model_path)
 
         if 'smp' in model_file:
