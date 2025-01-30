@@ -11,3 +11,25 @@ Zbiór danych składa się z ponad 300 zdjęć, które zawierają roślny wraz z
 | Zdjęcie | Maska|
 |---------|------|
 | ![Image_14](https://github.com/user-attachments/assets/507d878c-113e-4185-a14c-affa9943c8a2) | ![Image_14-mask](https://github.com/user-attachments/assets/e902e1ba-2704-4af6-aac6-c1db9c03ad9b) |
+
+```
+Skopiuj repozytorium za pomocą `git clone`
+```
+```
+Stwórz wirtualne środowisko `python -m venv venv`
+```
+```
+Aktywuj wirtualne środkowisko `.\venv\Scripts\activate`
+```
+```
+Pobierz biblioteki `pip install -r requirements.txt`
+```
+```
+Pobierz dane i umieść je w folderze data
+```
+```
+Następnie wpisz dvc pull
+```
+```
+Aby uruchomić pipeline wpisz `dvc repro`
+```
